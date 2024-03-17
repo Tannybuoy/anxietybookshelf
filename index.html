@@ -36,6 +36,8 @@
 <body>
 <div id="container">
     <div id="upload-box">
+        <h2>Enter Initials</h2>
+        <input type="text" id="user-name">
         <h2>Upload Images</h2>
         <input type="file" id="file-input" multiple accept="image/*">
         <div id="image-preview-container"></div>
@@ -86,10 +88,12 @@
     const images = document.querySelectorAll('.image-preview');
 
     const pdf = new jsPDF();
+    const name = document.getElementById('user-name').value.trim();
+
     let x = 10;
     let y = 10;
     let count = 0;
-    let aspectRatio = 1;
+    let aspectRatio = 0.66;
 
     images.forEach((image, index) => {
         if (index > 0 && index % 16 === 0) {
@@ -105,10 +109,11 @@
         }
         if (index == 0)
         {
-            aspectRatio = image.naturalWidth / image.naturalHeight;
+            //aspectRatio = image.naturalWidth / image.naturalHeight;
+            aspectRatio=0.66;
         } 
         const width = 40 
-        const height = 40/ aspectRatio;
+        const height = 40/ 0.66;
 
         
 
@@ -131,8 +136,8 @@
 
         
     });
-
-    pdf.save('output2.pdf');
+    pdf.text(pdf.internal.pageSize.Wwidth - 15, 5, `Name: ${name}`);
+    pdf.save(`${name}_bookshelf.pdf`);
     // Reset imagesUploaded flag
     imagesUploaded = false;
 }
