@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image to PDF Converter</title>
+<style>
+    #container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 20px;
+    }
+
+    #upload-box {
+        border: 2px dashed #aaa;
+        padding: 20px;
+        text-align: center;
+        width: 45%;
+    }
+
+    #pdf-box {
+        border: 2px dashed #aaa;
+        padding: 20px;
+        text-align: center;
+        width: 45%;
+    }
+
+    .image-preview {
+        margin-bottom: 10px;
+        max-width: 100px;
+        max-height: 100px;
+    }
+</style>
+</head>
+<body>
+<div id="container">
+    <div id="upload-box">
+        <h2>Upload Images</h2>
+        <input type="file" id="file-input" multiple accept="image/*">
+        <div id="image-preview-container"></div>
+    </div>
+    <div id="pdf-box">
+        <h2>Convert to PDF</h2>
+        <button onclick="convertToPdf()">Convert to PDF</button>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script>
+    function handleFileSelect(event) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById('image-preview-container');
+        previewContainer.innerHTML = '';
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.classList.add('image-preview');
+                previewContainer.appendChild(img);
+
+                // Rotate the image
+                const rotatedImg = new Image();
+                rotatedImg.src = e.target.result;
+                rotatedImg.classList.add('image-preview');
+                rotatedImg.style.transform = 'rotate(180deg)';
+                previewContainer.appendChild(rotatedImg);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.getElementById('file-input').addEventListener('change', handleFileSelect);
+
+    function convertToPdf() {
+    const images = document.querySelectorAll('.image-preview');
+
+    const pdf = new jsPDF({precision: 500});
+    let x = 10;
+    let y = 10;
+    let count = 0;
+
+    images.forEach((image, index) => {
+        if (index > 0 && index % 16 === 0) {
+            pdf.addPage();
+            x = 10;
+            y = 10;
+            count = 0;
+        }
+
+        if (count % 4 === 0 && count !== 0) {
+            x = 10;
+            y += 1.5;
+        }
+
+        const aspectRatio = image.naturalWidth / image.naturalHeight;
+        const width = 30*aspectRatio
+        const height = 30;
+
+        html2canvas(image, {backgroundColor: null, scale: 20, logging: true}).then(canvas => {
+            const rotatedCanvas = document.createElement('canvas');
+            rotatedCanvas.width = canvas.width;
+            rotatedCanvas.height = canvas.height;
+            const ctx = rotatedCanvas.getContext('2d');
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(Math.PI);
+            ctx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
+            
+        
+
+            pdf.addImage(rotatedCanvas.toDataURL('image/png'), 'PNG', x, y, width, height);
+                x += width + 5;
+                count++;
+
+                if (count % 4 === 0) {
+                    y += height + 5;
+                    x = 10;
+                }
+            });
+        });
+
+        setTimeout(() => pdf.save('OUTPUT3.pdf'), 2000); // Delay to ensure all images are rendered
+    
+}
+</script>
+</body>
+</html>
