@@ -90,8 +90,8 @@
     const pdf = new jsPDF();
     const name = document.getElementById('user-name').value.trim();
 
-    let x = 10;
-    let y = 10;
+    let x = 20;
+    let y = 20;
     let count = 0;
     let aspectRatio = 0.66;
 
@@ -104,8 +104,8 @@
         }
 
         if (count % 4 === 0 && count !== 0) {
-            x = 10;
-            y += 1.5;
+            x = 20;
+            y += 0;
         }
         if (index == 0)
         {
@@ -130,13 +130,13 @@
         count++;
 
         if (count % 4 === 0) {
-            y += height + 5;
-            x = 10;
+            y += height
+            x = 20;
         }
 
         
     });
-    pdf.text(pdf.internal.pageSize.Wwidth - 15, 5, `Name: ${name}`);
+    pdf.text(5, 10, `Name: ${name}`);
     pdf.save(`${name}_bookshelf.pdf`);
     // Reset imagesUploaded flag
     imagesUploaded = false;
