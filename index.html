@@ -3,8 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image to PDF Converter</title>
+<title>Anxiety Bookshelf Templates</title>
 <style>
+    body {
+        margin: 0; /* Reset default margin */
+        background-color: #f0f8ff; /* Light Blue */
+        font-family: Arial, sans-serif;
+    }
+
     #container {
         display: flex;
         justify-content: space-around;
@@ -12,39 +18,80 @@
         padding: 20px;
     }
 
-    #upload-box {
-        border: 2px dashed #aaa;
+    #upload-box, #pdf-box {
+        border: 2px solid #4682b4; /* Steel Blue */
         padding: 20px;
         text-align: center;
         width: 45%;
+        background-color: #fff; /* White */
+        height: 350px; /* Set a fixed height */
+        overflow-y: auto; /* Add vertical scroll if needed */
     }
 
-    #pdf-box {
-        border: 2px dashed #aaa;
-        padding: 20px;
-        text-align: center;
-        width: 45%;
+
+    h2 {
+        color: #4682b4; /* Steel Blue */
+    }
+
+    input[type="text"], input[type="file"], button {
+        margin: 10px 0;
+        padding: 10px;
+        width: 80%;
+        border: 1px solid #4682b4; /* Steel Blue */
+        border-radius: 5px;
+    }
+
+    input[type="file"] {
+        margin: 10px 0;
+        padding: 10px;
+        width: 80%;
+        border: 1px solid #4682b4; /* Steel Blue */
+        border-radius: 5px;
+        background-color: #fff; /* White */
+        color: #4682b4; /* Steel Blue */
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Hover effect for the file input button */
+    input[type="file"]:hover {
+        background-color: #4682b4; /* Steel Blue */
+        color: #fff; /* White */
+    }
+
+
+    button {
+        background-color: #4682b4; /* Steel Blue */
+        color: #fff; /* White */
+        font-weight: bold;
+        cursor: pointer;
     }
 
     .image-preview {
-        margin-bottom: 10px;
+        margin: 0px auto;
         max-width: 100px;
         max-height: 100px;
     }
 </style>
 </head>
 <body>
+<header style="text-align: center; background-color: #4682b4; color: #fff; padding: 10px;">
+    <h1>Anxiety Bookshelf Templates</h1>
+    <p>By Tanya Gupta</p>
+</header>
 <div id="container">
     <div id="upload-box">
         <h2>Enter Initials</h2>
         <input type="text" id="user-name">
         <h2>Upload Images</h2>
         <input type="file" id="file-input" multiple accept="image/*">
-        <div id="image-preview-container"></div>
+
     </div>
     <div id="pdf-box">
         <h2>Convert to PDF</h2>
         <button onclick="convertToPdf()">Convert to PDF</button>
+        <div id="image-preview-container"></div>
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -111,11 +158,11 @@
         {
             //aspectRatio = image.naturalWidth / image.naturalHeight;
             aspectRatio=0.66;
-        } 
-        const width = 40 
+        }
+        const width = 40
         const height = 40/ 0.66;
 
-        
+
 
         pdf.addImage(image.src, 'JPEG', x, y, width, height);
         if (count % 2 != 0)
@@ -126,7 +173,7 @@
         {
             x += width + 5;
         }
-        
+
         count++;
 
         if (count % 4 === 0) {
@@ -134,7 +181,7 @@
             x = 20;
         }
 
-        
+
     });
     pdf.text(5, 10, `Name: ${name}`);
     pdf.save(`${name}_bookshelf.pdf`);
